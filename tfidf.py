@@ -10,11 +10,12 @@ import numpy as np
 
 
 #TODO:
-#sum of cntr seems to add to more than word count
+#X:sum of cntr seems to add to more than word count
 #add genres for color coding --> do topic modelling? find a reference table?
 #add comments
 #removing all punctuation gives us 'youre' and run-on words like 'MrBlah', etc
-#separate out so we can just get the word counts from .txt files or get the tfIdf score
+#X:separate out so we can just get the word counts from .txt files or get the tfIdf score
+#option to write vocabulary big counts table to file?
 
 vocabulary = {}
 input_x = []
@@ -49,12 +50,13 @@ def calcTfidf(in_directory):
                 wAndC = wordAndCount.split(",")
                 cntr[wAndC[0]] = int(wAndC[1])
         max = cntr.most_common(1)
+        input_x.append(sum(cntr.values()))
         cntr.update({k: tf(v, max) for k, v in cntr.items()})
         cntr.update({k1: idf(k1, v1, numFiles) for k1, v1 in cntr.items()})
         average_tfidf = sum(cntr.values()) / len(cntr)
-        input_x.append(sum(cntr.values()))
         input_y.append(average_tfidf)
         titles.append(again_countfile.replace("_counts.txt", ""))
+        cntr.clear()
 
 
 def getWordCounts(filepath):
@@ -96,19 +98,31 @@ def idf(word_value, tf_value, numberOfFiles):
     idf_value = math.log(numberOfFiles/sum(vocabulary[word_value]))
     return tf_value * idf_value
 
-def graph():
-    graph_tfidf.graph(input_x, input_y, titles)
+def testPrint():
+    for idx, val in enumerate(titles):
+        print val, ",", input_y[idx]
+
+def graph(graphname):
+    graph_tfidf.graph(input_x, input_y, titles, graphname)
     
 def main():
-    # this is if you have just the unzipped .txt files in your directory
+    #This is if you've already downloaded all the txt files and are running the tfidf.py script with get_files.py
     input_directory = sys.argv[1]
-    #allbooks = [ f for f in listdir(input_directory) if isfile(join(input_directory, f)) and "txt" in f ]
-        #for file in allbooks:
-#getWordCounts(join(input_directory,file))
-    
-    calcTfidf(input_directory)
-        
-    graph()
+    #mode is either genCounts or tfidf or all
+    mode = sys.argv[2]
+    #graph or print results option
+    display = sys.argv[3]
+    if ("genCounts" in mode or "all" in mode):
+        allbooks = [ f for f in listdir(input_directory) if isfile(join(input_directory, f)) and "txt" in f ]
+        for file in allbooks:
+            getWordCounts(join(input_directory,file))
+    if ("tfidf" in mode or "all" in mode):
+        calcTfidf(input_directory)
+
+    if "graph" in display:
+        graph("test")
+    elif "print" in display:
+        testPrint()
 
 if __name__ == "__main__":
     main()
