@@ -31,7 +31,7 @@ Once you have the .txt files, you can run tfidf.py to generate the tf-idf scores
   graph lets you create a plotly graph from your tf-idf scores. For now, the x-axis, y-axis and graph name are hardcoded in, but in the    future, I'll be amending it so that you can provide it from the command line.
   print displays the results in the format (Title, word count, tf-idf) to stdout
 
-<b>Example<b>: python tfidf.py . tfidf print
+<b>Example</b>: python tfidf.py . tfidf print
 
 <b>Output</b>:
 
