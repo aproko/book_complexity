@@ -20,9 +20,9 @@ There is also a commented out function that would let you download the files one
 
 Once you have the .txt files, you can run tfidf.py to generate the tf-idf scores of each file. <b>Tf-idf</b> is a measure of how important a word is to a document: it is a ratio of <i>term frequency</i> (how often a word appears in a given document) and <i>inverse document frequency</i>, which helps discount words that appear very frequently in all documents (eg. <i>the</i>).
 
-<b>python tfidf.py <i>input_directory</i> <i>mode</i> <i>display_option</i></b>
+<b>python tfidf.py <i>inputdirectory</i> <i>mode</i> <i>display_option</i></b>
 
-<i>Input_directory</i>: self-explanatory; the directory in which your .txt files are stored
+<i>InputDirectory</i>: self-explanatory; the directory in which your .txt files are stored
 
 <i>Mode</i>: genCounts or tfidf or all
   genCounts generates the _counts.txt files from your raw .txt files; tfidf assumes you had already generated _counts.txt files at some    previous point and now want to rerun the tfidf calculation directly from those; all means you want to both generate _counts.txt files    AND calcualte the tf-idf score
