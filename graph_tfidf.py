@@ -52,7 +52,7 @@ def graph(input_x, input_y, title_labels):
                     y=19966,
                      xref='x',
                      yref='y',
-                     text="Count of Monte Cristo",
+                     text="The Count of Monte Cristo",
                      showarrow=True,
                      arrowhead=2,
                      arrowsize=1,

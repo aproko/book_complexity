@@ -22,12 +22,12 @@ urlfile = sys.argv[2]
 
 #Allows you to download files one by one, generate the counts files on the fly (if downloading very large amounts of text) and delete the text files.
 #def processFile(filename):
-    #txt_filename = filename.replace(".zip", ".txt")
-    #if os.path.isfile(txt_filename):
-    #    tfidf.getWordCounts(txt_filename)
-    #elif os.path.isdir(txt_filename.replace(".txt","")):
-    #    actual_filename = join(txt_filename.replace(".txt", ""),txt_filename)
-    #    tfidf.getWordCounts(actual_filename)
+#    txt_filename = filename.replace(".zip", ".txt")
+#    if os.path.isfile(txt_filename):
+#       tfidf.getWordCounts(txt_filename)
+#    elif os.path.isdir(txt_filename.replace(".txt","")):
+#       actual_filename = join(txt_filename.replace(".txt", ""),txt_filename)
+#       tfidf.getWordCounts(actual_filename)
 #    os.rmdir(txt_filename.replace(".txt",""))
 
 

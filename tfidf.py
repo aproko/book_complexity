@@ -10,7 +10,7 @@ import numpy as np
 
 
 #TODO:
-#add genres for color coding --> do topic modelling? find a reference table?
+#add genres for color coding?
 #removing all punctuation gives us 'youre' and run-on words like 'MrBlah', etc
 #option to write vocabulary big counts table to file?
 
