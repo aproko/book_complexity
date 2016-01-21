@@ -7,31 +7,31 @@ import sys
 from os.path import join
 from bs4 import BeautifulSoup
 
-#So now you can either download in a batch or download one by one and generate the counts files on the fly (if downloading very large amounts of text)
+
 #TODO:
-#X:make count input argument (how many books to process)
 #add support for special chars - i.e. translate weird chards to English
-#X:separate out so we can just download the files and get the .txt versus processing everything
-#X:add option to read initial URL from file (so I can have my own list of URLs for toy example with genres)
-#http://www.gutenberg.org/robot/harvest?filetypes[]=txt&langs[]=en
 
 #how many books to process
 maxcount = int(sys.argv[1])
-#option is to either download or all
-mode = sys.argv[2]
+
 #file which contains the URL to mine (urls.md - don't save as txt file or program will attempt to read it during the analysis)
-urlfile = sys.argv[3]
+urlfile = sys.argv[2]
 
-def processFile(filename):
-    txt_filename = filename.replace(".zip", ".txt")
-    if os.path.isfile(txt_filename):
-        tfidf.getWordCounts(txt_filename)
-    elif os.path.isdir(txt_filename.replace(".txt","")):
-        actual_filename = join(txt_filename.replace(".txt", ""),txt_filename)
-        tfidf.getWordCounts(actual_filename)
-        os.rmdir(txt_filename.replace(".txt",""))
+#option is to either download or all
+#mode = sys.argv[3]
+
+#Allows you to download files one by one, generate the counts files on the fly (if downloading very large amounts of text) and delete the text files.
+#def processFile(filename):
+    #txt_filename = filename.replace(".zip", ".txt")
+    #if os.path.isfile(txt_filename):
+    #    tfidf.getWordCounts(txt_filename)
+    #elif os.path.isdir(txt_filename.replace(".txt","")):
+    #    actual_filename = join(txt_filename.replace(".txt", ""),txt_filename)
+    #    tfidf.getWordCounts(actual_filename)
+#    os.rmdir(txt_filename.replace(".txt",""))
 
 
+#Downloads the zip file, extracts the .txt file and deletes the .zip file to save space.
 def downloadLink(url):
     tmp_fn = url.split("/")
     file_name = tmp_fn[len(tmp_fn)-1]
@@ -42,15 +42,17 @@ def downloadLink(url):
         zip = zipfile.ZipFile(file_name)
         zip.extractall()
         os.remove(file_name)
-        if "all" in mode:
-            processFile(file_name)
-        else:
-            print file_name
+        
+        #if "all" in mode:
+            #processFile(file_name)
+        #else:
+            #print file_name
+        
         return 1
     else:
         return 0
         
-
+#Reads in the urls.md file; if the url is of the format http://www.gutenberg.org/robot/harvest?filetypes[]=txt&langs[]=en, then we download that page and look through it for links to .zip files. Otherwise, we assume it is a regular link that we can download the book directly from.
 def readInUrlFile(url_file):
     with open(url_file, 'rU') as u_file:
         cn = 0

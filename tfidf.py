@@ -10,11 +10,8 @@ import numpy as np
 
 
 #TODO:
-#X:sum of cntr seems to add to more than word count
 #add genres for color coding --> do topic modelling? find a reference table?
-#add comments
 #removing all punctuation gives us 'youre' and run-on words like 'MrBlah', etc
-#X:separate out so we can just get the word counts from .txt files or get the tfIdf score
 #option to write vocabulary big counts table to file?
 
 vocabulary = {}
@@ -36,8 +33,10 @@ def addtovocab(input_countfile, input_filenumber, numberOfFiles):
             old_counts[input_filenumber] = 1
             vocabulary[vocab_word] = old_counts
 
+#First processes each file to add all of its vocabulary counts to the main vocabulary table;
+#then calculates the tf-idf score for each document.
 def calcTfidf(in_directory):
-    allcounts = [ a for a in listdir(in_directory) if isfile(join(in_directory, a)) and "_counts.txt" in a ]
+    allcounts = [ a for a in listdir(in_directory) if isfile(join(in_directory, a)) and "counts" in a ]
     numFiles = len(allcounts)
     filecount = 0
     for countfile in allcounts:
@@ -51,17 +50,20 @@ def calcTfidf(in_directory):
                 cntr[wAndC[0]] = int(wAndC[1])
         max = cntr.most_common(1)
         input_x.append(sum(cntr.values()))
+        #input_x.append(len(list(cntr)))
+        input_y.append(len(list(cntr)))
         cntr.update({k: tf(v, max) for k, v in cntr.items()})
         cntr.update({k1: idf(k1, v1, numFiles) for k1, v1 in cntr.items()})
         average_tfidf = sum(cntr.values()) / len(cntr)
-        input_y.append(average_tfidf)
+#input_y.append(average_tfidf)
         titles.append(again_countfile.replace("_counts.txt", ""))
         cntr.clear()
 
-
+#Generates a file with word counts
 def getWordCounts(filepath):
     print filepath
     gotTitle = 0
+    title = ""
     with open(filepath, 'rU') as infile:
         cnt = collections.Counter()
         for line in infile:
@@ -73,11 +75,11 @@ def getWordCounts(filepath):
                     words = preprocess(line)
                     for word in words:
                         cnt[word] += 1            
-    with open(title+"_counts.txt", 'w') as out:
+    with open(title+".counts", 'w') as out:
         for k, v in cnt.iteritems():
             out.write(",".join([str(k),str(v)]))
             out.write("\n")
-    os.remove(filepath)
+    #os.remove(filepath)
     cnt.clear()
 
 def getTitle(titleLine):
@@ -100,10 +102,10 @@ def idf(word_value, tf_value, numberOfFiles):
 
 def testPrint():
     for idx, val in enumerate(titles):
-        print val, ",", input_y[idx]
+        print val, ",", input_x[idx], ",", input_y[idx]
 
-def graph(graphname):
-    graph_tfidf.graph(input_x, input_y, titles, graphname)
+def graph():
+    graph_tfidf.graph(input_x, input_y, titles)
     
 def main():
     #This is if you've already downloaded all the txt files and are running the tfidf.py script with get_files.py
@@ -120,7 +122,7 @@ def main():
         calcTfidf(input_directory)
 
     if "graph" in display:
-        graph("test")
+        graph()
     elif "print" in display:
         testPrint()
 
